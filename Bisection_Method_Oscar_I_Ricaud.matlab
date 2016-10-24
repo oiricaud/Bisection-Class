@@ -25,13 +25,16 @@
 % The variable count is the index of the current iterate. Tap the carriage
 % return to continue with the iteration. 
 function [root, error_bound]=Bisection_Method_Oscar_I_Ricaud(a0,b0, ep, max_iterate)
+
+fprintf('\n it_count,    a,     b,      c,     f(c), b-c(error), rel_error \n')
+
 if(a0 >= b0)
     disp('a0 < b0 is not true. Stop!')
     return
 end
 
 format short e 
-a = a0; b=b0;
+a = a0; b = b0;
 fa = f(a); fb = f(b);
 
 if sign(fa)*sign(fb) >0
@@ -40,13 +43,13 @@ if sign(fa)*sign(fb) >0
 end
 
 c = (a+b)/2;
+old = c;
 it_count = 0;
-fprintf('\n it_count a b c f(c) b-c\n')
 
 while b-c > ep && it_count < max_iterate
     it_count = it_count + 1;
     fc = f(c);
-    iteration = [it_count a b c fc b-c];
+    iteration = [it_count a b c fc b-c (b-c/c)]
     if sign(fb)* sign(fc) <= 0
         a = c;
         fa = fc;
@@ -55,12 +58,15 @@ while b-c > ep && it_count < max_iterate
         fb = fc;
     end 
     c = (a+b)/2;
-    pause
+    
 end
 format long 
 root = c;
 format short e
 error_bound = b-c;
+disp(iteration);
+
+
 
 function value = f(x)
 value = x.^3-3*x.^2+3*x-1;
